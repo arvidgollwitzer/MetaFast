@@ -19,9 +19,11 @@ Described by Arvid E. Gollwitzer et al. (current version at https://doi.org/10.4
 
 
 ## <a name="install"></a>Installation
+The provided tests uses large files, make sure you have **Git LFS installed and initialized** before proceeding! 
 ```sh
 # Download MetaFast
 git clone https://github.com/CMU-SAFARI/MetaFast.git
+cd MetaFast
 
 # Compile the Containment Search (cs) Stage 
 make cs -C MetaFast/ContainmentSearch
@@ -51,7 +53,8 @@ The testing environment provides all output results from each stage under *Repro
 ```sh
 # Run the complete MetaFast Pipeline
 # Results are written to: ReproducibleEvaluation/Results/MetaFast
-python3 Scripts/MetaFast.py ../Data/ReadSets/test.fastq ../Data/RefData/test/ --mmi_dir ../Data/RefData/test/ --temp_dir ../ReproducibleEvaluation/Results/MetaFast  --translation ../Data/RefData/test/translate/translate_sorted.csv --keep_temp_files --filter base-counting --edit_dist_threshold 15 --output ../ReproducibleEvaluation/Results/MetaFast/profile.tsv
+cd MetaFast
+python3 Scripts/MetaFast.py ../Data/ReadSets/test.fastq ../Data/RefData/test/ ../Data/RefData/test/ ../Data/RefData/test/translate/translate_sorted.csv --temp_dir ../ReproducibleEvaluation/Results/MetaFast  --keep_temp_files --filter base-counting --edit_dist_threshold 15 --output ../ReproducibleEvaluation/Results/MetaFast/profile.tsv
 
 # Run each of the three pipeline stages individually (repeated for every edit distance approximation algorithm)
 # Results are written to (for each pipeline stage, respectively): 
@@ -66,7 +69,7 @@ cd ReproducibleEvaluation
 <details>
 <summary>Complete MetaFast Pipeline</summary>
 <pre>
-python3 Scripts/MetaFast.py ../Data/ReadSets/test.fastq ../Data/RefData/test/ --mmi_dir ../Data/RefData/test/ --temp_dir ../ReproducibleEvaluation/Results/MetaFast  --translation ../Data/RefData/test/translate/translate_sorted.csv --keep_temp_files --filter base-counting --edit_dist_threshold 15 --output ../ReproducibleEvaluation/Results/MetaFast/profile.tsv
+python3 Scripts/MetaFast.py ../Data/ReadSets/test.fastq ../Data/RefData/test/ ../Data/RefData/test/ ../Data/RefData/test/translate/translate_sorted.csv --temp_dir ../ReproducibleEvaluation/Results/MetaFast  --keep_temp_files --filter base-counting --edit_dist_threshold 15 --output ../ReproducibleEvaluation/Results/MetaFast/profile.tsv
 Found -n 3?, -b set 0?, mmi /home/arvidg/git/MetaFast/Data/RefData/test?, reads /home/arvidg/git/MetaFast/Data/ReadSets/test.fastq?, tr /home/arvidg/git/MetaFast/Data/RefData/test/translate/translate_sorted.csv?, out /home/arvidg/git/MetaFast/ReproducibleEvaluation/Results/MetaFast/ContainmentResults.csv?
 fCnt is 1
 Creating thread 0
@@ -435,7 +438,7 @@ Profiling for edlib
 ## <a name="usecases"></a>Use Cases
 ```sh
 # Containment Search 
-cs ../../Data/RefData/test ../../Data/ReadSets/test.fastq translate/translate_sorted_C.csv ../../ReproducibleEvaluation/Results/ContainmentSearch/ContainmentResults.csv
+cs ../../Data/RefData/test ../../Data/ReadSets/test.fastq translate/translate_sorted.csv ../../ReproducibleEvaluation/Results/ContainmentSearch/ContainmentResults.csv
 
 # Read Mapping (all edit distance approximation algorithms)
 ReadMapping.sh -s 15 -e 15 -i 1 -n 3 -r ../Data/ReadSets/test.fastq -d Results/ContainmentSearch -t Results/ReadMapping/Timing -o Results/ReadMapping/SAM-files

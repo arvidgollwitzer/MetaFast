@@ -3,9 +3,11 @@ import argparse, math, os, subprocess, sys, tempfile, shutil
 
 
 def select_parseargs():    # handle user arguments
-	parser = argparse.ArgumentParser(description='Run CMash and select a subset of the whole database to align to.')
+	parser = argparse.ArgumentParser(description='Run MetaFast containment search.')
 	parser.add_argument('reads', help='Path to reads file.')
-	parser.add_argument('data', help='Path to data/ directory with the files from setup_data.sh')
+	parser.add_argument('data', help='Path to DB/ directory with the files from download_db.sh')
+	parser.add_argument('mmi_dir', help='Minimap-Threader: Directory containing all mmi-files')
+	parser.add_argument('translation', help='Accession to taxid translation file for subset DB generation')
 	parser.add_argument('--metalign_results', default='NONE', help='Give location of Metalign-seeding results if already done.')
 	parser.add_argument('--cutoff', type=int, default=0.0001, help='Seed count cutoff value. Default is 0.0001.')
 	parser.add_argument('--db', default='AUTO', help='Where to write subset database. Default: temp_dir/subset_db.fna')
@@ -21,8 +23,6 @@ def select_parseargs():    # handle user arguments
 	parser.add_argument('--temp_dir', default='AUTO/', help='Directory to write temporary files to.')
 	parser.add_argument('--threads', type=int, default=4, help='How many compute threads for KMC to use. Default: 4')
 	parser.add_argument('--minimap_n', type=int, default=3, help='Minimap: Discard chains consisting of <INT> number of minimizers')
-	parser.add_argument('--mmi_dir',  default = 'AUTO', help='Minimap-Threader: Directory containing all mmi-files')
-	parser.add_argument('--translation',  default = 'AUTO', help='Accession to taxid for subset DB generation')
 	parser.add_argument('--filter', default='base-counting', choices=['adjacency-filter', 'base-counting', 'edlib', 'grim_original', 'grim_original_tweak', 'hd', 'magnet', 'qgram', 'shd', 'shouji', 'sneakysnake'])
 	parser.add_argument('--edit_dist_threshold', type=int, default=15, help='-r edit distance threshold for minimap2.')
 	args = parser.parse_args()
@@ -72,7 +72,7 @@ def run_minimap_and_cutoff(args, taxid2info):
 	return organisms_to_include
 
 def make_db_and_dbinfo(args, organisms_to_include, taxid2info):
-	open(args.db, 'w').close()  # clear cmash results; no longer needed
+	open(args.db, 'w').close()  # clear file
 	with(open(args.db, 'a')) as outfile:
 		for organism in organisms_to_include:
 			organism_fname = args.db_dir + organism

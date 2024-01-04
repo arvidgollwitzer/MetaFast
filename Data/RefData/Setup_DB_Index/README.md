@@ -12,9 +12,26 @@ Described by Arvid E. Gollwitzer et al. (current version at https://doi.org/10.4
 
 
 ## <a name="install"></a>Installation
-```sh
-# TBD: Instructions to get fna files and make MMIs!
+We provide a one-click-setup script:
+```bash
+./setup.sh
 ```
+The setup has three stages: 
+1. Download of the dataset used by Metalign
+2. Generation of a sorted translation file used in our containment search implementation, saved to [DB](../DB/)
+3. Concatenation of the organism files in the DB to generate index files of a certain size, both saved to [Index](../Index/)
+
+By default, the setup will concatenate **all** organism files tp a size of about 800MB, and generate index files with kmer-length 28.
+During index generation, the script will by default use up to 16 threads. 
+To change these values, call ```setup.sh``` with different parameters.  
+Example: for concatenation size 2.5GB, with kmer-length 15, using up to 10 threads, and only limited to organism files listed in *infile.txt*, with debug output for concatenation
+```bash
+#Usage: ./setup.sh [-s fna_target_size(GB)=0.8] [-k kmer_length=28] [-t max_threads=16] [-i infile] [-d (flag, debug concatenation)]
+./setup.sh -s 2.5 -k 15 -t 10 -i infile.txt -d
+```
+To execute individual stages of the setup independently, refer to the corresponding scripts for specific usage information
+
+To (re)generate index files from already concatenated organism files (e.g. with different kmer-length), use ```generate_mmis.sh```.
 
 
 ##  <a name="contact"></a>Getting Help

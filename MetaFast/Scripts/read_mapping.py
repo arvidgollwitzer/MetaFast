@@ -20,10 +20,10 @@ def echo(msg, verbose):
 def profile_parseargs():  # handle user arguments
 	parser = argparse.ArgumentParser(description='Compute abundance estimations for species in a sample.')
 	parser.add_argument('infiles', nargs='+', help='sam or reads file(s) (space-delimited if multiple). Required.')
-	parser.add_argument('data', help='Path to data/ directory with the files from setup_data.sh')
+	parser.add_argument('data', help='Path to DB/ directory with the files from download_db.sh')
 	parser.add_argument('--db', default='NONE', help='Path to database from containment_search. Required if read files given')
 	parser.add_argument('--dbinfo', default='AUTO', help='Location of db_info file. Default: data/db_info.txt')
-	parser.add_argument('--input_type', default='AUTO', choices=['fastq', 'fasta', 'sam', 'AUTO'],
+	parser.add_argument('--input_type', default='AUTO', choices=['fastq', 'fasta', 'sam', 'mmi', 'AUTO'],
 		help='Type of input file (fastq/fasta/sam). Default: try to automatically determine')
 	parser.add_argument('--length_normalize', action='store_true', help='Normalize abundances by genome length.')
 	parser.add_argument('--low_mem', action='store_true',
@@ -515,6 +515,8 @@ def map_main(args = None):
 			args.input_type = 'fasta'
 		elif splits[-1] == 'sam':
 			args.input_type = 'sam'
+		elif splits[-1] == 'mmi':
+			args.input_type = 'mmi'
 		else:
 			sys.exit('Could not auto-determine file type. Use --input_type.')
 	open(args.output, 'w').close()  # test to see if writeable
